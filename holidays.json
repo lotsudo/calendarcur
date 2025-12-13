@@ -1,0 +1,65 @@
+[
+  {
+    "title": "День Конституции Республики Беларусь",
+    "type": "fixed",
+    "date": "03-15",
+    "category": "state"
+  },
+  {
+    "title": "День единения народов Беларуси и России",
+    "type": "fixed",
+    "date": "04-02",
+    "category": "state"
+  },
+  {
+    "title": "День Победы",
+    "type": "fixed",
+    "date": "05-09",
+    "category": "state"
+  },
+  {
+    "title": "День Независимости Республики Беларусь",
+    "type": "fixed",
+    "date": "07-03",
+    "category": "state"
+  },
+  {
+    "title": "День Октябрьской революции",
+    "type": "fixed",
+    "date": "11-07",
+    "category": "state"
+  },
+  {
+    "title": "День памяти Хатынской трагедии",
+    "type": "fixed",
+    "date": "03-22",
+    "category": "state"
+  },
+  {
+    "title": "Международный женский день",
+    "type": "fixed",
+    "date": "03-08",
+    "category": "international"
+  },
+  {
+    "title": "Всемирный день борьбы со СПИДом",
+    "type": "fixed",
+    "date": "12-01",
+    "category": "international"
+  },
+
+  {
+    "title": "День белорусской письменности",
+    "type": "floating",
+    "rule": "firstSunday",
+    "month": 9,
+    "category": "state"
+  },
+  {
+    "title": "День учителя",
+    "type": "floating",
+    "rule": "firstSunday",
+    "month": 10,
+    "category": "international"
+  }
+]
