@@ -22,7 +22,14 @@
         </select>
     </section>
 
-    <section id="calendar"></section>
+    <section id="calendarWrapper">
+        <table id="calendar" class="calendar-table"></table>
+    </section>
+
+    <section id="eventDetails" class="event-details">
+        <h2>События дня</h2>
+        <ul id="eventList"></ul>
+    </section>
 
     <section class="event-form">
         <h2>Добавить / редактировать событие</h2>
@@ -40,6 +47,7 @@
 </main>
 
 <footer>
+    <div id="holidayCountdown"></div>
     <p>© Календарь куратора | Колледж</p>
 </footer>
 
