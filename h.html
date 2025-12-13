@@ -2,25 +2,38 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Календарь праздников</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Календарь куратора</title>
+    <link rel="stylesheet" href="c.css">
 </head>
 <body>
 
-<h1>Календарь праздников</h1>
+<header>
+    <h1>Календарь куратора учебной группы</h1>
+</header>
 
-<div class="controls">
-    <button id="prev">◀</button>
-    <span id="title"></span>
-    <button id="next">▶</button>
-</div>
+<section class="calendar-controls">
+    <button id="prevMonth">◀</button>
+    <h2 id="calendarTitle"></h2>
+    <button id="nextMonth">▶</button>
+
+    <select id="filterCategory">
+        <option value="all">Все категории</option>
+        <option value="state">Государственные</option>
+        <option value="international">Международные</option>
+        <option value="college">Колледж</option>
+    </select>
+</section>
 
 <table id="calendar"></table>
 
-<div id="details">
-    <h2>События дня</h2>
+<section id="eventDetails">
+    <h3>События дня</h3>
     <ul id="eventList"></ul>
-</div>
+</section>
+
+<footer>
+    <p>© Календарь куратора</p>
+</footer>
 
 <script src="script.js"></script>
 </body>
