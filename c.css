@@ -1,45 +1,18 @@
-* {
-    box-sizing: border-box;
-    font-family: "Segoe UI", sans-serif;
-}
+* { box-sizing: border-box; font-family: "Segoe UI", sans-serif; }
 
-body {
-    margin: 0;
-    background: linear-gradient(120deg, #eef2f3, #ffffff);
-}
+body { margin: 0; background: linear-gradient(120deg, #eef2f3, #ffffff); }
 
-header {
-    background: #34495e;
-    color: white;
-    padding: 20px;
-    text-align: center;
-}
+header { background: #34495e; color: white; padding: 20px; text-align: center; }
 
-.calendar-controls {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    padding: 15px;
-}
+.calendar-controls { display: flex; gap: 10px; justify-content: center; padding: 15px; }
 
 .calendar-controls input,
-.calendar-controls select {
-    padding: 8px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-}
+.calendar-controls select,
+.calendar-controls button { padding: 8px; border-radius: 6px; border: 1px solid #ccc; cursor: pointer; }
 
-#calendarWrapper {
-    display: flex;
-    justify-content: center;
-    margin: 20px 0;
-}
+#calendarWrapper { display: flex; justify-content: center; margin: 20px 0; }
 
-.calendar-table {
-    border-collapse: collapse;
-    width: 90%;
-    max-width: 900px;
-}
+.calendar-table { border-collapse: collapse; width: 90%; max-width: 900px; }
 
 .calendar-table th, .calendar-table td {
     border: 1px solid #ccc;
@@ -51,87 +24,31 @@ header {
     cursor: pointer;
 }
 
-.calendar-table th {
-    background: #34495e;
-    color: white;
-    text-align: center;
-}
+.calendar-table th { background: #34495e; color: white; text-align: center; }
 
-.day-number {
-    font-weight: bold;
-}
+.day-number { font-weight: bold; }
 
-.event-marker {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    display: inline-block;
-    margin-right: 2px;
-    margin-top: 2px;
-}
+.event-marker { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 2px; margin-top: 2px; }
 
 .state { background: #f9ca24; }
 .international { background: #0984e3; color: white; }
 .college { background: #2ecc71; }
 
-.today {
-    background: #ffeaa7 !important;
-}
+.today { outline: 2px solid #6c5ce7; }
+.next-holiday { border: 2px solid #e17055 !important; }
 
-.next-holiday {
-    border: 2px solid #e17055 !important;
-}
+.event-details { max-width: 600px; margin: 0 auto 30px auto; padding: 15px; background: white; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 
-.event-details {
-    max-width: 600px;
-    margin: 0 auto 30px auto;
-    padding: 15px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
+.event-details ul { list-style: none; padding: 0; }
+.event-details li { margin-bottom: 8px; }
 
-.event-details ul {
-    list-style: none;
-    padding: 0;
-}
-
-.event-details li {
-    margin-bottom: 8px;
-}
-
-.event-form {
-    max-width: 600px;
-    margin: 0 auto 30px auto;
-    padding: 20px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
+.event-form { max-width: 600px; margin: 0 auto 30px auto; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
 .event-form input,
 .event-form select,
-.event-form button {
-    width: 100%;
-    margin-bottom: 10px;
-    padding: 10px;
-}
+.event-form button { width: 100%; margin-bottom: 10px; padding: 10px; }
 
-button {
-    background: #2ecc71;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-}
+button { background: #2ecc71; color: white; border: none; border-radius: 8px; }
+button:hover { background: #27ae60; }
 
-button:hover {
-    background: #27ae60;
-}
-
-#holidayCountdown {
-    text-align: center;
-    font-weight: bold;
-    margin: 10px 0;
-    font-size: 16px;
-}
+#holidayCountdown { text-align: center; font-weight: bold; margin: 10px 0; font-size: 16px; }
