@@ -1,20 +1,35 @@
 const calendar = document.getElementById("calendar");
-const title = document.getElementById("title");
+const title = document.getElementById("calendarTitle");
 const eventList = document.getElementById("eventList");
-const prev = document.getElementById("prev");
-const next = document.getElementById("next");
+const filterCategory = document.getElementById("filterCategory");
+
+const prev = document.getElementById("prevMonth");
+const next = document.getElementById("nextMonth");
 
 let currentDate = new Date();
-let holidays = [];
+let events = [];
 
+/* ЗАГРУЗКА ПРАЗДНИКОВ */
 fetch("holidays.json")
-    .then(r => r.json())
+    .then(res => res.json())
     .then(data => {
-        holidays = data;
-        render();
+        const year = new Date().getFullYear();
+
+        data.forEach(h => {
+            if (h.type === "fixed") {
+                events.push({
+                    title: h.title,
+                    category: h.category,
+                    date: `${year}-${h.date}`
+                });
+            }
+        });
+
+        renderCalendar();
     });
 
-function render() {
+/* РЕНДЕР КАЛЕНДАРЯ */
+function renderCalendar() {
     calendar.innerHTML = "";
 
     const year = currentDate.getFullYear();
@@ -27,19 +42,21 @@ function render() {
 
     const days = ["Пн","Вт","Ср","Чт","Пт","Сб","Вс"];
     let tr = document.createElement("tr");
+
     days.forEach(d => {
-        let th = document.createElement("th");
+        const th = document.createElement("th");
         th.textContent = d;
         tr.appendChild(th);
     });
+
     calendar.appendChild(tr);
 
     let firstDay = new Date(year, month, 1).getDay();
     firstDay = firstDay === 0 ? 6 : firstDay - 1;
 
-    let daysInMonth = new Date(year, month + 1, 0).getDate();
-
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
     tr = document.createElement("tr");
+
     for (let i = 0; i < firstDay; i++) {
         tr.appendChild(document.createElement("td"));
     }
@@ -51,31 +68,37 @@ function render() {
         }
 
         const td = document.createElement("td");
-        const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+        td.classList.add("day-cell");
+
+        const dateStr = `${year}-${String(month + 1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
 
         const num = document.createElement("div");
         num.className = "day-number";
         num.textContent = day;
         td.appendChild(num);
 
-        const holiday = holidays.find(h => h.date === dateStr.slice(5));
-        if (holiday) td.classList.add(holiday.category);
+        const dayEvents = events.filter(e => e.date === dateStr)
+            .filter(e => filterCategory.value === "all" || e.category === filterCategory.value);
 
-        if (dateStr === new Date().toISOString().slice(0,10)) {
-            td.classList.add("today");
+        if (dayEvents.length > 0) {
+            td.classList.add(dayEvents[0].category);
         }
 
-        td.onclick = () => showEvents(dateStr);
+        const today = new Date().toISOString().slice(0,10);
+        if (dateStr === today) td.classList.add("today");
+
+        td.onclick = () => showEvents(dayEvents, dateStr);
         tr.appendChild(td);
     }
 
     calendar.appendChild(tr);
 }
 
-function showEvents(date) {
+/* ПОКАЗ СОБЫТИЙ */
+function showEvents(dayEvents, date) {
     eventList.innerHTML = `<li><strong>${date}</strong></li>`;
-    const dayEvents = holidays.filter(h => date.endsWith(h.date));
-    if (!dayEvents.length) {
+
+    if (dayEvents.length === 0) {
         eventList.innerHTML += "<li>Событий нет</li>";
     } else {
         dayEvents.forEach(e => {
@@ -84,12 +107,15 @@ function showEvents(date) {
     }
 }
 
+/* НАВИГАЦИЯ */
 prev.onclick = () => {
     currentDate.setMonth(currentDate.getMonth() - 1);
-    render();
+    renderCalendar();
 };
 
 next.onclick = () => {
     currentDate.setMonth(currentDate.getMonth() + 1);
-    render();
+    renderCalendar();
 };
+
+filterCategory.onchange = renderCalendar;
