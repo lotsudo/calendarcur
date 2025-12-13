@@ -12,13 +12,14 @@ monthPicker.valueAsDate = new Date();
 let events = JSON.parse(localStorage.getItem("events")) || [];
 let holidaysDB = [];
 
-/* ================== БАЗА ДАННЫХ ================== */
+/* ================== ЗАГРУЗКА БАЗЫ ДАННЫХ ================== */
 fetch("holidays.json")
     .then(res => res.json())
     .then(data => {
         holidaysDB = data;
         loadHolidays();
         renderCalendar();
+        renderNextHolidayCountdown();
     });
 
 function saveToStorage() {
@@ -28,9 +29,7 @@ function saveToStorage() {
 /* ================== ПЛАВАЮЩИЕ ДАТЫ ================== */
 function getFirstSunday(year, month) {
     const date = new Date(year, month - 1, 1);
-    while (date.getDay() !== 0) {
-        date.setDate(date.getDate() + 1);
-    }
+    while (date.getDay() !== 0) date.setDate(date.getDate() + 1);
     return date;
 }
 
@@ -60,7 +59,7 @@ function loadHolidays() {
     saveToStorage();
 }
 
-/* ================== КАЛЕНДАРЬ ================== */
+/* ================== РЕНДЕР КАЛЕНДАРЯ ================== */
 function renderCalendar() {
     calendar.innerHTML = "";
 
@@ -91,6 +90,7 @@ function renderCalendar() {
                         events = events.filter(x => x !== e);
                         saveToStorage();
                         renderCalendar();
+                        renderNextHolidayCountdown();
                     }
                 };
 
@@ -117,8 +117,46 @@ saveEvent.onclick = () => {
 
     saveToStorage();
     renderCalendar();
+    renderNextHolidayCountdown();
     eventTitle.value = "";
 };
 
-monthPicker.onchange = renderCalendar;
+/* ================== ФИЛЬТР И ВЫБОР МЕСЯЦА ================== */
+monthPicker.onchange = () => {
+    renderCalendar();
+    renderNextHolidayCountdown();
+};
 filterCategory.onchange = renderCalendar;
+
+/* ================== СЧЕТЧИК ДО БЛИЖАЙШЕГО ПРАЗДНИКА ================== */
+function renderNextHolidayCountdown() {
+    let countdownDiv = document.getElementById("holidayCountdown");
+    if (!countdownDiv) {
+        countdownDiv = document.createElement("div");
+        countdownDiv.id = "holidayCountdown";
+        countdownDiv.style.textAlign = "center";
+        countdownDiv.style.margin = "15px 0";
+        countdownDiv.style.fontWeight = "bold";
+        document.body.insertBefore(countdownDiv, document.querySelector("footer"));
+    }
+
+    const today = new Date();
+    const upcoming = events
+        .filter(e => e.system)
+        .map(e => ({...e, dateObj: new Date(e.date)}))
+        .filter(e => e.dateObj >= today)
+        .sort((a, b) => a.dateObj - b.dateObj);
+
+    if (upcoming.length === 0) {
+        countdownDiv.textContent = "Ближайших праздников нет";
+        return;
+    }
+
+    const next = upcoming[0];
+    const diffTime = next.dateObj - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    countdownDiv.textContent = `Ближайший праздник: "${next.title}" через ${diffDays} дней (${next.date})`;
+}
+
+renderNextHolidayCountdown();
