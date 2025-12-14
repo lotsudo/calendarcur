@@ -9,6 +9,8 @@ const eventList = document.getElementById("eventList");
 const prevMonth = document.getElementById("prevMonth");
 const nextMonth = document.getElementById("nextMonth");
 
+const filterCategory = document.getElementById("filterCategory");
+
 const loginBtn = document.getElementById("loginBtn");
 const passwordInput = document.getElementById("passwordInput");
 const loginStatus = document.getElementById("loginStatus");
@@ -24,26 +26,39 @@ const PASSWORD = "curator123";
 let isLoggedIn = localStorage.getItem("login") === "true";
 
 function updateLoginUI() {
-    loginStatus.textContent = isLoggedIn ? "✔ Режим редактирования" : "🔒 Только просмотр";
+    loginStatus.textContent = isLoggedIn
+        ? "✔ Режим редактирования"
+        : "🔒 Только просмотр";
+
     eventForm.style.display = isLoggedIn ? "block" : "none";
+    loginBtn.textContent = isLoggedIn ? "Выйти" : "Войти";
 }
 
 loginBtn.onclick = () => {
     if (isLoggedIn) {
+        const confirmExit = confirm(
+            "Вы уверены, что хотите выйти из аккаунта?\n" +
+            "После выхода редактирование праздников будет недоступно."
+        );
+
+        if (!confirmExit) return;
+
         isLoggedIn = false;
         localStorage.removeItem("login");
-    } else {
-        if (passwordInput.value === PASSWORD) {
-            isLoggedIn = true;
-            localStorage.setItem("login", "true");
-            passwordInput.value = "";
-            loginError.style.display = "none";
-        } else {
-            loginError.textContent = "Неверный пароль. Попробуйте ещё раз.";
-            loginError.style.display = "block";
-        }
+        updateLoginUI();
+        return;
     }
-    updateLoginUI();
+
+    if (passwordInput.value === PASSWORD) {
+        isLoggedIn = true;
+        localStorage.setItem("login", "true");
+        passwordInput.value = "";
+        loginError.style.display = "none";
+        updateLoginUI();
+    } else {
+        loginError.textContent = "Неверный пароль. Попробуйте ещё раз.";
+        loginError.style.display = "block";
+    }
 };
 
 passwordInput.oninput = () => {
@@ -65,7 +80,7 @@ fetch("holidays.json")
         renderCountdown();
     });
 
-/* ================== DATE HELPERS ================== */
+/* ================== HELPERS ================== */
 function getFirstSunday(year, month) {
     const d = new Date(year, month - 1, 1);
     while (d.getDay() !== 0) d.setDate(d.getDate() + 1);
@@ -97,14 +112,22 @@ function renderCalendar() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
 
-    const events = [...getHolidaysForYear(year), ...collegeEvents];
+    const allEvents = [
+        ...getHolidaysForYear(year),
+        ...collegeEvents
+    ];
+
+    const filteredEvents = allEvents.filter(e =>
+        filterCategory.value === "all" ||
+        e.category === filterCategory.value
+    );
 
     title.textContent = currentDate.toLocaleString("ru", {
         month: "long",
         year: "numeric"
     });
 
-    /* Days header */
+    /* Header */
     const days = ["Пн","Вт","Ср","Чт","Пт","Сб","Вс"];
     const trHead = document.createElement("tr");
     days.forEach(d => {
@@ -132,11 +155,11 @@ function renderCalendar() {
         }
 
         const td = document.createElement("td");
-        const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+        const dateStr = `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
 
         td.innerHTML = `<div class="day-number">${day}</div>`;
 
-        const dayEvents = events.filter(e => e.date === dateStr);
+        const dayEvents = filteredEvents.filter(e => e.date === dateStr);
 
         if (dayEvents.length) {
             td.classList.add(dayEvents[0].category);
@@ -156,26 +179,27 @@ function showEvents(list, date) {
 
     if (!list.length) {
         eventList.innerHTML = "<li>Событий нет</li>";
-    } else {
-        list.forEach(e => {
-            const li = document.createElement("li");
-            li.textContent = e.title;
-
-            if (isLoggedIn && e.category === "college") {
-                const del = document.createElement("button");
-                del.textContent = " ❌";
-                del.onclick = () => {
-                    collegeEvents = collegeEvents.filter(x => x !== e);
-                    localStorage.setItem("collegeEvents", JSON.stringify(collegeEvents));
-                    renderCalendar();
-                    showEvents([], date);
-                };
-                li.appendChild(del);
-            }
-
-            eventList.appendChild(li);
-        });
+        return;
     }
+
+    list.forEach(e => {
+        const li = document.createElement("li");
+        li.textContent = e.title;
+
+        if (isLoggedIn && e.category === "college") {
+            const del = document.createElement("button");
+            del.textContent = " ❌";
+            del.onclick = () => {
+                collegeEvents = collegeEvents.filter(x => x !== e);
+                localStorage.setItem("collegeEvents", JSON.stringify(collegeEvents));
+                renderCalendar();
+                showEvents([], date);
+            };
+            li.appendChild(del);
+        }
+
+        eventList.appendChild(li);
+    });
 
     if (isLoggedIn) {
         eventDate.value = date;
@@ -212,6 +236,8 @@ nextMonth.onclick = () => {
     currentDate.setMonth(currentDate.getMonth() + 1);
     renderCalendar();
 };
+
+filterCategory.onchange = renderCalendar;
 
 /* ================== COUNTDOWN ================== */
 function renderCountdown() {
