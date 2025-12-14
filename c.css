@@ -15,31 +15,31 @@ header {
     text-align: center;
 }
 
-.calendar-controls {
+#loginPanel {
     display: flex;
-    gap: 10px;
     justify-content: center;
-    align-items: center;
-    padding: 15px;
+    gap: 10px;
+    padding: 10px;
+    background: #dfe6e9;
 }
 
-.calendar-controls button,
-.calendar-controls select {
-    padding: 6px 10px;
-    font-size: 16px;
-    cursor: pointer;
+.calendar-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+    padding: 15px;
 }
 
 #calendar {
     width: 95%;
     max-width: 1100px;
-    margin: 0 auto;
+    margin: auto;
     border-collapse: collapse;
     background: white;
 }
 
-#calendar th,
-#calendar td {
+th, td {
     border: 1px solid #ccc;
     width: 14.28%;
     height: 110px;
@@ -47,10 +47,9 @@ header {
     position: relative;
 }
 
-#calendar th {
+th {
     background: #34495e;
     color: white;
-    height: 40px;
 }
 
 .day-number {
@@ -60,34 +59,23 @@ header {
     font-weight: bold;
     font-size: 16px;
     color: #000 !important;
-    z-index: 2;
 }
 
-/* Категории */
 .day-cell.state {
-    background: rgba(249, 202, 36, 0.35);
+    background: rgba(249,202,36,0.3);
 }
-
 .day-cell.international {
-    background: rgba(9, 132, 227, 0.35);
+    background: rgba(9,132,227,0.3);
 }
-
 .day-cell.college {
-    background: rgba(46, 204, 113, 0.35);
+    background: rgba(46,204,113,0.3);
 }
 
-/* Сегодня */
 .today {
     outline: 3px solid #6c5ce7;
 }
 
-/* Наведение */
-.day-cell:hover {
-    background: #dfe6e9;
-    cursor: pointer;
-}
-
-#eventDetails {
+#eventDetails, #eventForm {
     max-width: 1100px;
     margin: 20px auto;
     background: white;
@@ -95,31 +83,6 @@ header {
     border-radius: 6px;
 }
 
-#loginPanel {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    padding: 10px;
-    background: #dfe6e9;
-}
-
-#loginPanel input {
-    padding: 6px;
-    font-size: 14px;
-}
-
-#loginPanel button {
-    padding: 6px 12px;
+button {
     cursor: pointer;
 }
-
-#loginStatus {
-    font-weight: bold;
-}
-
-
-footer {
-    text-align: center;
-    padding: 10px;
-}
-
