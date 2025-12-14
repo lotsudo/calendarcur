@@ -95,7 +95,31 @@ header {
     border-radius: 6px;
 }
 
+#loginPanel {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+    background: #dfe6e9;
+}
+
+#loginPanel input {
+    padding: 6px;
+    font-size: 14px;
+}
+
+#loginPanel button {
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+#loginStatus {
+    font-weight: bold;
+}
+
+
 footer {
     text-align: center;
     padding: 10px;
 }
+
