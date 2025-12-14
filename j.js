@@ -1,3 +1,4 @@
+const loginError = document.getElementById("loginError");
 const calendar = document.getElementById("calendar");
 const thead = calendar.querySelector("thead");
 const tbody = calendar.querySelector("tbody");
@@ -171,3 +172,4 @@ nextMonth.onclick = () => {
 };
 
 updateLoginUI();
+
