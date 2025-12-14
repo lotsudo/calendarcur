@@ -9,15 +9,16 @@
 
 <header>
     <h1>Календарь куратора учебной группы</h1>
-    
 </header>
-    <section id="loginPanel">
+
+<!-- ВХОД -->
+<section id="loginPanel">
     <input type="password" id="passwordInput" placeholder="Пароль куратора">
     <button id="loginBtn">Войти</button>
     <span id="loginStatus"></span>
 </section>
 
-
+<!-- УПРАВЛЕНИЕ КАЛЕНДАРЁМ -->
 <section class="calendar-controls">
     <button id="prevMonth">◀</button>
     <h2 id="calendarTitle"></h2>
@@ -33,17 +34,24 @@
 
 <table id="calendar"></table>
 
+<!-- СОБЫТИЯ ДНЯ -->
 <section id="eventDetails">
     <h3>События дня</h3>
     <ul id="eventList"></ul>
+</section>
+
+<!-- ФОРМА (ТОЛЬКО ДЛЯ КУРАТОРА) -->
+<section id="eventForm" style="display:none">
+    <h3>Добавить событие колледжа</h3>
+    <input type="date" id="eventDate">
+    <input type="text" id="eventTitle" placeholder="Название">
+    <button id="addEvent">Добавить</button>
 </section>
 
 <footer>
     <p>© Календарь куратора</p>
 </footer>
 
-<script src="j.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
-
-
