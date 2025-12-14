@@ -10,23 +10,43 @@ let currentDate = new Date();
 let events = [];
 
 /* ЗАГРУЗКА ПРАЗДНИКОВ */
+function getFirstSunday(year, month) {
+    const date = new Date(year, month - 1, 1);
+    while (date.getDay() !== 0) {
+        date.setDate(date.getDate() + 1);
+    }
+    return date;
+}
+
 fetch("holidays.json")
     .then(res => res.json())
     .then(data => {
         const year = new Date().getFullYear();
 
         data.forEach(h => {
+            let fullDate = null;
+
             if (h.type === "fixed") {
+                fullDate = `${year}-${h.date}`;
+            }
+
+            if (h.type === "floating" && h.rule === "firstSunday") {
+                const d = getFirstSunday(year, h.month);
+                fullDate = d.toISOString().slice(0, 10);
+            }
+
+            if (fullDate) {
                 events.push({
                     title: h.title,
                     category: h.category,
-                    date: `${year}-${h.date}`
+                    date: fullDate
                 });
             }
         });
 
         renderCalendar();
     });
+
 
 /* РЕНДЕР КАЛЕНДАРЯ */
 function renderCalendar() {
@@ -119,3 +139,4 @@ next.onclick = () => {
 };
 
 filterCategory.onchange = renderCalendar;
+
