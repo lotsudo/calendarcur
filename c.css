@@ -1,88 +1,187 @@
 * {
     box-sizing: border-box;
-    font-family: "Segoe UI", sans-serif;
+    font-family: "Segoe UI", Arial, sans-serif;
 }
 
 body {
     margin: 0;
-    background: #eef2f3;
+    background: linear-gradient(120deg, #eef2f3, #ffffff);
 }
 
+/* ---------- HEADER ---------- */
 header {
     background: #34495e;
     color: white;
-    padding: 15px;
+    padding: 20px;
     text-align: center;
 }
 
+/* ---------- LOGIN PANEL ---------- */
 #loginPanel {
+    max-width: 420px;
+    margin: 20px auto;
+    padding: 15px 20px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+
     display: flex;
-    justify-content: center;
     gap: 10px;
-    padding: 10px;
-    background: #dfe6e9;
+    align-items: center;
+    justify-content: center;
 }
 
+#loginPanel input {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+#loginPanel button {
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: none;
+    background: #6c5ce7;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#loginStatus {
+    font-size: 13px;
+    margin-left: 5px;
+}
+
+/* ---------- CONTROLS ---------- */
 .calendar-controls {
     display: flex;
     justify-content: center;
-    gap: 10px;
     align-items: center;
-    padding: 15px;
+    gap: 15px;
+    padding: 10px;
 }
 
+.calendar-controls button {
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: none;
+    background: #34495e;
+    color: white;
+    cursor: pointer;
+}
+
+.calendar-controls select {
+    padding: 6px;
+    border-radius: 8px;
+}
+
+/* ---------- CALENDAR ---------- */
 #calendar {
     width: 95%;
     max-width: 1100px;
-    margin: auto;
+    margin: 10px auto;
     border-collapse: collapse;
     background: white;
-}
-
-th, td {
-    border: 1px solid #ccc;
-    width: 14.28%;
-    height: 110px;
-    vertical-align: top;
-    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
 }
 
 th {
     background: #34495e;
     color: white;
+    padding: 10px 0;
+}
+
+td {
+    border: 1px solid #ddd;
+    height: 110px;
+    vertical-align: top;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+td:hover {
+    background: rgba(0,0,0,0.04);
 }
 
 .day-number {
     position: absolute;
     top: 6px;
-    left: 6px;
+    left: 8px;
     font-weight: bold;
-    font-size: 16px;
-    color: #000 !important;
+    font-size: 15px;
 }
 
-.day-cell.state {
-    background: rgba(249,202,36,0.3);
-}
-.day-cell.international {
-    background: rgba(9,132,227,0.3);
-}
-.day-cell.college {
-    background: rgba(46,204,113,0.3);
+/* ---------- EVENT COLORS ---------- */
+.state {
+    background: linear-gradient(135deg, #f9ca24, #f6e58d);
 }
 
-.today {
-    outline: 3px solid #6c5ce7;
+.international {
+    background: linear-gradient(135deg, #74b9ff, #0984e3);
+    color: white;
 }
 
-#eventDetails, #eventForm {
+.college {
+    background: linear-gradient(135deg, #55efc4, #00b894);
+}
+
+/* ---------- EVENT DETAILS ---------- */
+#eventDetails {
     max-width: 1100px;
     margin: 20px auto;
-    background: white;
     padding: 15px;
-    border-radius: 6px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
 
-button {
+#eventDetails ul {
+    padding-left: 20px;
+}
+
+#eventDetails li {
+    margin-bottom: 6px;
+}
+
+/* ---------- FORM ---------- */
+#eventForm {
+    max-width: 420px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+#eventForm h3 {
+    text-align: center;
+    margin-top: 0;
+}
+
+#eventForm input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+#eventForm button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    background: #00b894;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
     cursor: pointer;
+}
+
+#eventForm button:hover {
+    background: #019875;
 }
