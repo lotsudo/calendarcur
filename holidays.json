@@ -1,65 +1,36 @@
 [
-  {
-    "title": "День Конституции Республики Беларусь",
-    "type": "fixed",
-    "date": "03-15",
-    "category": "state"
-  },
-  {
-    "title": "День единения народов Беларуси и России",
-    "type": "fixed",
-    "date": "04-02",
-    "category": "state"
-  },
-  {
-    "title": "День Победы",
-    "type": "fixed",
-    "date": "05-09",
-    "category": "state"
-  },
-  {
-    "title": "День Независимости Республики Беларусь",
-    "type": "fixed",
-    "date": "07-03",
-    "category": "state"
-  },
-  {
-    "title": "День Октябрьской революции",
-    "type": "fixed",
-    "date": "11-07",
-    "category": "state"
-  },
-  {
-    "title": "День памяти Хатынской трагедии",
-    "type": "fixed",
-    "date": "03-22",
-    "category": "state"
-  },
-  {
-    "title": "Международный женский день",
-    "type": "fixed",
-    "date": "03-08",
-    "category": "international"
-  },
-  {
-    "title": "Всемирный день борьбы со СПИДом",
-    "type": "fixed",
-    "date": "12-01",
-    "category": "international"
-  },
+  { "title": "День Конституции Республики Беларусь", "type": "fixed", "date": "03-15", "category": "state" },
+  { "title": "День единения народов Беларуси и России", "type": "fixed", "date": "04-02", "category": "state" },
+  { "title": "День Государственного флага, Государственного герба и Государственного гимна Республики Беларусь", "type": "fixed", "date": "05-12", "category": "state" },
+  { "title": "День Победы", "type": "fixed", "date": "05-09", "category": "state" },
+  { "title": "День Независимости Республики Беларусь", "type": "fixed", "date": "07-03", "category": "state" },
+  { "title": "День народного единства", "type": "fixed", "date": "09-17", "category": "state" },
+  { "title": "День Октябрьской революции", "type": "fixed", "date": "11-07", "category": "state" },
 
-  {
-    "title": "День белорусской письменности",
-    "type": "floating",
-    "rule": "firstSunday",
-    "month": 9,
-    "category": "state"
-  },
-  {
-    "title": "День учителя",
-    "type": "floating",
-    "rule": "firstSunday",
-    "month": 10,
-    "category": "international"
-  }
+  { "title": "День труда", "type": "fixed", "date": "05-01", "category": "state" },
+  { "title": "День памяти воинов-интернационалистов", "type": "fixed", "date": "02-15", "category": "state" },
+  { "title": "День памяти Хатынской трагедии", "type": "fixed", "date": "03-22", "category": "state" },
+  { "title": "День чернобыльской трагедии", "type": "fixed", "date": "04-26", "category": "state" },
+
+  { "title": "Международный женский день", "type": "fixed", "date": "03-08", "category": "international" },
+  { "title": "День защитника Отечества", "type": "fixed", "date": "02-23", "category": "international" },
+  { "title": "День семьи", "type": "fixed", "date": "05-15", "category": "international" },
+  { "title": "День защиты детей", "type": "fixed", "date": "06-01", "category": "international" },
+  { "title": "День Матери", "type": "fixed", "date": "10-14", "category": "international" },
+
+  { "title": "Международный день лесов", "type": "fixed", "date": "03-21", "category": "international" },
+  { "title": "Всемирный день здоровья", "type": "fixed", "date": "04-07", "category": "international" },
+  { "title": "День космонавтики", "type": "fixed", "date": "04-12", "category": "international" },
+  { "title": "Всемирный день беженцев", "type": "fixed", "date": "06-20", "category": "international" },
+  { "title": "Всемирный день предотвращения самоубийств", "type": "fixed", "date": "09-10", "category": "international" },
+  { "title": "Международный день памяти жертв фашизма", "type": "fixed", "date": "09-14", "category": "international" },
+  { "title": "Всемирный день без табака", "type": "fixed", "date": "05-31", "category": "international" },
+  { "title": "Международный день энергосбережения", "type": "fixed", "date": "11-11", "category": "international" },
+  { "title": "Международный день отказа от курения", "type": "fixed", "date": "11-21", "category": "international" },
+  { "title": "Всемирный день борьбы со СПИДом", "type": "fixed", "date": "12-01", "category": "international" },
+  { "title": "Международный день инвалидов", "type": "fixed", "date": "12-03", "category": "international" },
+  { "title": "Всемирный день прав человека", "type": "fixed", "date": "12-10", "category": "international" },
+
+  { "title": "День белорусской письменности", "type": "floating", "rule": "firstSunday", "month": 9, "category": "state" },
+  { "title": "День учителя", "type": "floating", "rule": "firstSunday", "month": 10, "category": "international" }
 ]
