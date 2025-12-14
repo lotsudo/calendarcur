@@ -145,9 +145,9 @@ function renderCalendar() {
         const today = new Date().toISOString().slice(0,10);
         if (dateStr === today) td.classList.add("today");
 td.onclick = () => {
-    if (!isLoggedIn) {
-        alert("Требуется вход куратора");
-        return;
+    showEvents(dayEvents, dateStr);
+};
+
     }
     showEvents(dayEvents, dateStr);
 };
@@ -183,6 +183,7 @@ next.onclick = () => {
 };
 
 filterCategory.onchange = renderCalendar;
+
 
 
 
