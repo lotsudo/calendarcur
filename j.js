@@ -1,3 +1,41 @@
+const PASSWORD = "curator123"; // ← можно поменять
+
+let isLoggedIn = localStorage.getItem("curatorLogin") === "true";
+
+const loginBtn = document.getElementById("loginBtn");
+const passwordInput = document.getElementById("passwordInput");
+const loginStatus = document.getElementById("loginStatus");
+
+function updateLoginUI() {
+    if (isLoggedIn) {
+        loginStatus.textContent = "✔ Режим редактирования";
+        passwordInput.style.display = "none";
+        loginBtn.textContent = "Выйти";
+    } else {
+        loginStatus.textContent = "🔒 Только просмотр";
+        passwordInput.style.display = "inline-block";
+        loginBtn.textContent = "Войти";
+    }
+}
+
+loginBtn.onclick = () => {
+    if (isLoggedIn) {
+        isLoggedIn = false;
+        localStorage.removeItem("curatorLogin");
+    } else {
+        if (passwordInput.value === PASSWORD) {
+            isLoggedIn = true;
+            localStorage.setItem("curatorLogin", "true");
+            passwordInput.value = "";
+        } else {
+            alert("Неверный пароль");
+        }
+    }
+    updateLoginUI();
+};
+
+updateLoginUI();
+
 const calendar = document.getElementById("calendar");
 const title = document.getElementById("calendarTitle");
 const eventList = document.getElementById("eventList");
@@ -139,4 +177,5 @@ next.onclick = () => {
 };
 
 filterCategory.onchange = renderCalendar;
+
 
