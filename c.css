@@ -43,7 +43,7 @@ header {
     padding: 10px 18px;
     border-radius: 10px;
     border: none;
-    background: #6c5ce7;
+    background: #34495E;
     color: white;
     font-weight: bold;
     cursor: pointer;
@@ -207,5 +207,6 @@ td:hover {
         transform: translateY(0);
     }
 }
+
 
 
