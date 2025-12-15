@@ -8,7 +8,7 @@
 <body>
 
 <header>
-    <h1>Календарь куратора</h1>
+    <h1>Календарь куратора учебной группы</h1>
 </header>
 
 <section class="auth-panel">
@@ -24,21 +24,25 @@
     <button id="nextMonth">▶</button>
 
     <select id="filterCategory">
-        <option value="all">Все</option>
+        <option value="all">Все категории</option>
         <option value="state">Государственные</option>
         <option value="international">Международные</option>
         <option value="college">Колледж</option>
     </select>
 
-    <button id="printCalendar">Сохранить / PDF</button>
+    <button id="printCalendar" class="print-btn">
+        🖨 Сохранить / PDF
+    </button>
 </section>
 
 <div id="countdown"></div>
 
-<table id="calendar">
-    <thead></thead>
-    <tbody></tbody>
-</table>
+<div class="calendar-wrapper">
+    <table id="calendar">
+        <thead></thead>
+        <tbody></tbody>
+    </table>
+</div>
 
 <section class="events">
     <h3>События дня</h3>
@@ -66,4 +70,3 @@
 <script src="j.js"></script>
 </body>
 </html>
-
