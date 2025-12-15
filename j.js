@@ -1,182 +1,135 @@
-/* ================== DOM ================== */
-const calendar = document.getElementById("calendar");
+const PASSWORD = "curator123";
+
+let isLoggedIn = localStorage.getItem("login") === "true";
+let collegeEvents = JSON.parse(localStorage.getItem("collegeEvents")) || [];
+let holidaysDB = [];
+let currentDate = new Date();
+
+const calendar = document.querySelector("#calendar");
 const thead = calendar.querySelector("thead");
 const tbody = calendar.querySelector("tbody");
-
 const title = document.getElementById("calendarTitle");
 const eventList = document.getElementById("eventList");
-
-const prevMonth = document.getElementById("prevMonth");
-const nextMonth = document.getElementById("nextMonth");
-
 const filterCategory = document.getElementById("filterCategory");
-
 const loginBtn = document.getElementById("loginBtn");
 const passwordInput = document.getElementById("passwordInput");
 const loginStatus = document.getElementById("loginStatus");
 const loginError = document.getElementById("loginError");
-
 const eventForm = document.getElementById("eventForm");
 const eventDate = document.getElementById("eventDate");
 const eventTitle = document.getElementById("eventTitle");
 const saveEvent = document.getElementById("saveEvent");
+const countdown = document.getElementById("countdown");
 
-/* ================== AUTH ================== */
-const PASSWORD = "curator123";
-let isLoggedIn = localStorage.getItem("login") === "true";
+/* MODAL */
+const modal = document.getElementById("modal");
+const modalTitle = document.getElementById("modalTitle");
+const modalDate = document.getElementById("modalDate");
+const modalCategory = document.getElementById("modalCategory");
+const modalDescription = document.getElementById("modalDescription");
+document.getElementById("closeModal").onclick = () => modal.style.display = "none";
 
-function updateLoginUI() {
-    loginStatus.textContent = isLoggedIn
-        ? "✔ Режим редактирования"
-        : "🔒 Только просмотр";
-
+/* AUTH */
+function updateAuthUI() {
+    loginStatus.textContent = isLoggedIn ? "✔ Редактирование" : "🔒 Просмотр";
     eventForm.style.display = isLoggedIn ? "block" : "none";
     loginBtn.textContent = isLoggedIn ? "Выйти" : "Войти";
 }
 
 loginBtn.onclick = () => {
     if (isLoggedIn) {
-        const confirmExit = confirm(
-            "Вы уверены, что хотите выйти из аккаунта?\n" +
-            "После выхода редактирование праздников будет недоступно."
-        );
-
-        if (!confirmExit) return;
-
-        isLoggedIn = false;
-        localStorage.removeItem("login");
-        updateLoginUI();
+        if (confirm("Выйти из аккаунта? Редактирование станет недоступно.")) {
+            isLoggedIn = false;
+            localStorage.removeItem("login");
+            updateAuthUI();
+        }
         return;
     }
 
     if (passwordInput.value === PASSWORD) {
         isLoggedIn = true;
         localStorage.setItem("login", "true");
-        passwordInput.value = "";
-        loginError.style.display = "none";
-        updateLoginUI();
+        loginError.textContent = "";
+        updateAuthUI();
     } else {
-        loginError.textContent = "Неверный пароль. Попробуйте ещё раз.";
-        loginError.style.display = "block";
+        loginError.textContent = "Неверный пароль";
     }
 };
 
-passwordInput.oninput = () => {
-    loginError.style.display = "none";
-};
-
-/* ================== DATA ================== */
-let currentDate = new Date();
-let selectedDate = null;
-
-let holidaysDB = [];
-let collegeEvents = JSON.parse(localStorage.getItem("collegeEvents")) || [];
-
 fetch("holidays.json")
-    .then(res => res.json())
+    .then(r => r.json())
     .then(data => {
         holidaysDB = data;
         renderCalendar();
         renderCountdown();
     });
 
-/* ================== HELPERS ================== */
 function getFirstSunday(year, month) {
     const d = new Date(year, month - 1, 1);
     while (d.getDay() !== 0) d.setDate(d.getDate() + 1);
     return d;
 }
 
-function getHolidaysForYear(year) {
-    return holidaysDB.map(h => {
-        let date = null;
-
-        if (h.type === "fixed") {
-            date = `${year}-${h.date}`;
-        }
-
-        if (h.type === "floating" && h.rule === "firstSunday") {
-            const d = getFirstSunday(year, h.month);
-            date = d.toISOString().slice(0, 10);
-        }
-
+function getEventsForYear(year) {
+    const system = holidaysDB.map(h => {
+        let date;
+        if (h.type === "fixed") date = `${year}-${h.date}`;
+        if (h.type === "floating") date = getFirstSunday(year, h.month).toISOString().slice(0,10);
         return { ...h, date };
     });
+    return [...system, ...collegeEvents];
 }
 
-/* ================== CALENDAR ================== */
 function renderCalendar() {
     thead.innerHTML = "";
     tbody.innerHTML = "";
 
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
+    title.textContent = currentDate.toLocaleString("ru", { month: "long", year: "numeric" });
 
-    const allEvents = [
-        ...getHolidaysForYear(year),
-        ...collegeEvents
-    ];
-
-    const filteredEvents = allEvents.filter(e =>
-        filterCategory.value === "all" ||
-        e.category === filterCategory.value
-    );
-
-    title.textContent = currentDate.toLocaleString("ru", {
-        month: "long",
-        year: "numeric"
-    });
-
-    /* Header */
     const days = ["Пн","Вт","Ср","Чт","Пт","Сб","Вс"];
-    const trHead = document.createElement("tr");
+    const tr = document.createElement("tr");
     days.forEach(d => {
         const th = document.createElement("th");
         th.textContent = d;
-        trHead.appendChild(th);
+        tr.appendChild(th);
     });
-    thead.appendChild(trHead);
+    thead.appendChild(tr);
 
-    /* Dates */
+    const events = getEventsForYear(year).filter(e =>
+        filterCategory.value === "all" || e.category === filterCategory.value
+    );
+
     let firstDay = new Date(year, month, 1).getDay();
     firstDay = firstDay === 0 ? 6 : firstDay - 1;
-
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-    let tr = document.createElement("tr");
 
-    for (let i = 0; i < firstDay; i++) {
-        tr.appendChild(document.createElement("td"));
-    }
+    let row = document.createElement("tr");
+    for (let i = 0; i < firstDay; i++) row.appendChild(document.createElement("td"));
 
-    for (let day = 1; day <= daysInMonth; day++) {
-        if (tr.children.length === 7) {
-            tbody.appendChild(tr);
-            tr = document.createElement("tr");
+    for (let d = 1; d <= daysInMonth; d++) {
+        if (row.children.length === 7) {
+            tbody.appendChild(row);
+            row = document.createElement("tr");
         }
 
         const td = document.createElement("td");
-        const dateStr = `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+        const dateStr = `${year}-${String(month+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+        td.innerHTML = `<div class="day-number">${d}</div>`;
 
-        td.innerHTML = `<div class="day-number">${day}</div>`;
+        const dayEvents = events.filter(e => e.date === dateStr);
+        if (dayEvents.length) td.classList.add(dayEvents[0].category);
 
-        const dayEvents = filteredEvents.filter(e => e.date === dateStr);
-
-        if (dayEvents.length) {
-            td.classList.add(dayEvents[0].category);
-        }
-
-        td.onclick = () => showEvents(dayEvents, dateStr);
-        tr.appendChild(td);
+        td.onclick = () => showEvents(dayEvents);
+        row.appendChild(td);
     }
 
-    tbody.appendChild(tr);
+    tbody.appendChild(row);
 }
 
-/* ================== EVENTS OF DAY ================== */
-function showEvents(list, date) {
-    selectedDate = date;
+function showEvents(list) {
     eventList.innerHTML = "";
-
     if (!list.length) {
         eventList.innerHTML = "<li>Событий нет</li>";
         return;
@@ -185,97 +138,51 @@ function showEvents(list, date) {
     list.forEach(e => {
         const li = document.createElement("li");
         li.textContent = e.title;
-
-        if (isLoggedIn && e.category === "college") {
-            const del = document.createElement("button");
-            del.textContent = " ❌";
-            del.onclick = () => {
-                collegeEvents = collegeEvents.filter(x => x !== e);
-                localStorage.setItem("collegeEvents", JSON.stringify(collegeEvents));
-                renderCalendar();
-                showEvents([], date);
-            };
-            li.appendChild(del);
-        }
-
+        li.onclick = () => openModal(e);
         eventList.appendChild(li);
     });
-
-    if (isLoggedIn) {
-        eventDate.value = date;
-    }
 }
 
-/* ================== ADD EVENT ================== */
+function openModal(e) {
+    modalTitle.textContent = e.title;
+    modalDate.textContent = "Дата: " + e.date;
+    modalCategory.textContent = "Категория: " + e.category;
+    modalDescription.textContent = e.description || "Описание отсутствует";
+    modal.style.display = "block";
+}
+
 saveEvent.onclick = () => {
     if (!isLoggedIn) return;
-
-    if (!eventDate.value || !eventTitle.value) {
-        alert("Заполните все поля");
-        return;
-    }
-
     collegeEvents.push({
         date: eventDate.value,
         title: eventTitle.value,
-        category: "college"
+        category: "college",
+        description: "Событие колледжа"
     });
-
     localStorage.setItem("collegeEvents", JSON.stringify(collegeEvents));
-    eventTitle.value = "";
     renderCalendar();
 };
 
-/* ================== NAVIGATION ================== */
-prevMonth.onclick = () => {
-    currentDate.setMonth(currentDate.getMonth() - 1);
-    renderCalendar();
-};
-
-nextMonth.onclick = () => {
-    currentDate.setMonth(currentDate.getMonth() + 1);
-    renderCalendar();
-};
-
+document.getElementById("printCalendar").onclick = () => window.print();
+document.getElementById("prevMonth").onclick = () => { currentDate.setMonth(currentDate.getMonth()-1); renderCalendar(); };
+document.getElementById("nextMonth").onclick = () => { currentDate.setMonth(currentDate.getMonth()+1); renderCalendar(); };
 filterCategory.onchange = renderCalendar;
 
-/* ================== COUNTDOWN ================== */
 function renderCountdown() {
     const today = new Date();
     let nearest = null;
 
-    for (let y = today.getFullYear(); y <= today.getFullYear() + 1; y++) {
-        getHolidaysForYear(y).forEach(h => {
-            const d = new Date(h.date);
-            if (d >= today && (!nearest || d < new Date(nearest.date))) {
-                nearest = h;
-            }
+    for (let y = today.getFullYear(); y <= today.getFullYear()+1; y++) {
+        getEventsForYear(y).forEach(e => {
+            const d = new Date(e.date);
+            if (d >= today && (!nearest || d < new Date(nearest.date))) nearest = e;
         });
     }
 
-    if (!nearest) return;
-
-    const diff = Math.ceil(
-        (new Date(nearest.date) - today) / (1000 * 60 * 60 * 24)
-    );
-
-    const block = document.createElement("div");
-    block.style.maxWidth = "420px";
-    block.style.margin = "15px auto";
-    block.style.padding = "12px";
-    block.style.background = "white";
-    block.style.borderRadius = "14px";
-    block.style.boxShadow = "0 6px 15px rgba(0,0,0,0.1)";
-    block.style.textAlign = "center";
-
-    block.innerHTML = `
-        <strong>Ближайший праздник:</strong><br>
-        ${nearest.title}<br>
-        Через ${diff} дн.
-    `;
-
-    document.body.insertBefore(block, document.querySelector(".calendar-controls"));
+    if (nearest) {
+        const diff = Math.ceil((new Date(nearest.date) - today)/(1000*60*60*24));
+        countdown.textContent = `Ближайший праздник: ${nearest.title} — через ${diff} дн.`;
+    }
 }
 
-/* ================== INIT ================== */
-updateLoginUI();
+updateAuthUI();
