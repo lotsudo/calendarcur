@@ -153,10 +153,46 @@ function renderCalendar() {
 
 function showEvents(list) {
     eventList.innerHTML = "";
+
     if (!list.length) {
         eventList.innerHTML = "<li>Событий нет</li>";
         return;
     }
+
+    list.forEach((e, index) => {
+        const li = document.createElement("li");
+        li.style.display = "flex";
+        li.style.justifyContent = "space-between";
+        li.style.alignItems = "center";
+
+        const title = document.createElement("span");
+        title.textContent = e.title;
+        title.style.cursor = "pointer";
+        title.onclick = () => openModal(e);
+
+        li.appendChild(title);
+
+        if (isLoggedIn && e.category === "college") {
+            const del = document.createElement("button");
+            del.textContent = "🗑";
+            del.style.background = "none";
+            del.style.border = "none";
+            del.style.cursor = "pointer";
+            del.onclick = () => {
+                if (confirm("Удалить событие?")) {
+                    collegeEvents.splice(index, 1);
+                    localStorage.setItem("collegeEvents", JSON.stringify(collegeEvents));
+                    renderCalendar();
+                    showEvents([]);
+                }
+            };
+            li.appendChild(del);
+        }
+
+        eventList.appendChild(li);
+    });
+}
+
 
     list.forEach(e => {
         const li = document.createElement("li");
@@ -213,6 +249,7 @@ function renderCountdown() {
 }
 
 updateAuthUI();
+
 
 
 
