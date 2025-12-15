@@ -139,6 +139,8 @@ function renderCalendar() {
     if (selectedCell) selectedCell.classList.remove("selected-day");
     td.classList.add("selected-day");
     selectedCell = td;
+            eventDate.value = dateStr;
+
 
     showEvents(dayEvents);
 };
@@ -211,5 +213,6 @@ function renderCountdown() {
 }
 
 updateAuthUI();
+
 
 
