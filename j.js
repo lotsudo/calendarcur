@@ -135,7 +135,14 @@ function renderCalendar() {
         const dayEvents = events.filter(e => e.date === dateStr);
         if (dayEvents.length) td.classList.add(dayEvents[0].category);
 
-        td.onclick = () => showEvents(dayEvents);
+        td.onclick = () => {
+    if (selectedCell) selectedCell.classList.remove("selected-day");
+    td.classList.add("selected-day");
+    selectedCell = td;
+
+    showEvents(dayEvents);
+};
+
         row.appendChild(td);
     }
 
@@ -204,4 +211,5 @@ function renderCountdown() {
 }
 
 updateAuthUI();
+
 
