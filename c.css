@@ -8,6 +8,7 @@ body {
     background: linear-gradient(120deg, #eef2f3, #ffffff);
 }
 
+/* Шапка */
 header {
     background: #34495E;
     color: white;
@@ -45,20 +46,37 @@ header {
     padding: 15px;
 }
 
-/* Кнопка печати */
-.print-btn {
-    background: #2d3436;
+.calendar-controls button {
+    background: #34495E;
     color: white;
     border: none;
     padding: 8px 14px;
     border-radius: 10px;
     cursor: pointer;
-    transition: 0.2s;
+    transition: 0.25s;
 }
 
-.print-btn:hover {
-    background: #1e272e;
+.calendar-controls button:hover {
+    background: #2c3e50;
     transform: translateY(-1px);
+}
+
+/* Кнопка печати */
+.print-btn {
+    background: #34495E;
+}
+
+/* Плашка отсчёта */
+#countdown {
+    max-width: 700px;
+    margin: 25px auto;
+    padding: 20px;
+    background: linear-gradient(135deg, #34495E, #2c3e50);
+    color: white;
+    border-radius: 18px;
+    text-align: center;
+    font-size: 18px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
 
 /* Календарь */
@@ -88,22 +106,23 @@ header {
 
 .day-number {
     font-weight: bold;
-    margin-bottom: 5px;
+}
+
+/* Выходные */
+.weekend {
+    background: #f1f2f6;
+}
+
+/* Сегодня */
+.today {
+    outline: 3px solid #34495E;
+    outline-offset: -3px;
 }
 
 /* Цвета событий */
-.state {
-    background: #f9ca24;
-}
-
-.international {
-    background: #74b9ff;
-    color: white;
-}
-
-.college {
-    background: #55efc4;
-}
+.state { background: #f9ca24; }
+.international { background: #74b9ff; color: white; }
+.college { background: #55efc4; }
 
 /* События */
 .events,
@@ -114,10 +133,6 @@ header {
     padding: 15px;
     border-radius: 16px;
     box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-}
-
-button {
-    cursor: pointer;
 }
 
 /* Модалка */
@@ -140,6 +155,23 @@ button {
     float: right;
     font-size: 22px;
     cursor: pointer;
+}
+
+/* Адаптация под телефон */
+@media (max-width: 768px) {
+    #calendar th,
+    #calendar td {
+        height: 80px;
+        font-size: 12px;
+    }
+
+    header h1 {
+        font-size: 20px;
+    }
+
+    #countdown {
+        font-size: 16px;
+    }
 }
 
 /* Печать */
