@@ -220,6 +220,8 @@ saveEvent.onclick = () => {
     });
     localStorage.setItem("collegeEvents", JSON.stringify(collegeEvents));
     renderCalendar();
+    eventTitle.value = "";
+
 };
 
 document.getElementById("printCalendar").onclick = () => window.print();
@@ -249,6 +251,7 @@ function renderCountdown() {
 }
 
 updateAuthUI();
+
 
 
 
