@@ -21,7 +21,7 @@ const eventTitle = document.getElementById("eventTitle");
 const saveEvent = document.getElementById("saveEvent");
 const countdown = document.getElementById("countdown");
 
-/* MODAL */
+/* Модалка */
 const modal = document.getElementById("modal");
 const modalTitle = document.getElementById("modalTitle");
 const modalDate = document.getElementById("modalDate");
@@ -29,7 +29,7 @@ const modalCategory = document.getElementById("modalCategory");
 const modalDescription = document.getElementById("modalDescription");
 document.getElementById("closeModal").onclick = () => modal.style.display = "none";
 
-/* AUTH */
+/* Авторизация */
 function updateAuthUI() {
     loginStatus.textContent = isLoggedIn ? "✔ Редактирование" : "🔒 Просмотр";
     eventForm.style.display = isLoggedIn ? "block" : "none";
@@ -38,7 +38,7 @@ function updateAuthUI() {
 
 loginBtn.onclick = () => {
     if (isLoggedIn) {
-        if (confirm("Выйти из аккаунта? Редактирование станет недоступно.")) {
+        if (confirm("Выйти из аккаунта?")) {
             isLoggedIn = false;
             localStorage.removeItem("login");
             updateAuthUI();
@@ -108,6 +108,8 @@ function renderCalendar() {
     let row = document.createElement("tr");
     for (let i = 0; i < firstDay; i++) row.appendChild(document.createElement("td"));
 
+    const today = new Date();
+
     for (let d = 1; d <= daysInMonth; d++) {
         if (row.children.length === 7) {
             tbody.appendChild(row);
@@ -117,6 +119,17 @@ function renderCalendar() {
         const td = document.createElement("td");
         const dateStr = `${year}-${String(month+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
         td.innerHTML = `<div class="day-number">${d}</div>`;
+
+        const dayOfWeek = new Date(year, month, d).getDay();
+        if (dayOfWeek === 0 || dayOfWeek === 6) td.classList.add("weekend");
+
+        if (
+            d === today.getDate() &&
+            month === today.getMonth() &&
+            year === today.getFullYear()
+        ) {
+            td.classList.add("today");
+        }
 
         const dayEvents = events.filter(e => e.date === dateStr);
         if (dayEvents.length) td.classList.add(dayEvents[0].category);
@@ -181,7 +194,11 @@ function renderCountdown() {
 
     if (nearest) {
         const diff = Math.ceil((new Date(nearest.date) - today)/(1000*60*60*24));
-        countdown.textContent = `Ближайший праздник: ${nearest.title} — через ${diff} дн.`;
+        countdown.innerHTML = `
+            <strong>Ближайший праздник</strong>
+            ${nearest.title}<br>
+            <small>через ${diff} дн.</small>
+        `;
     }
 }
 
