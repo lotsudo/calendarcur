@@ -26,6 +26,19 @@ const eventTitle = document.getElementById("eventTitle");
 const saveEvent = document.getElementById("saveEvent");
 const countdown = document.getElementById("countdown");
 
+/* Кнопка "Отмена" при редактировании */
+const cancelEditBtn = document.createElement("button");
+cancelEditBtn.textContent = "Отмена";
+cancelEditBtn.classList.add("event-btn");
+cancelEditBtn.style.backgroundColor = "#e74c3c";
+cancelEditBtn.onclick = () => {
+    editingIndex = null;
+    eventTitle.value = "";
+    eventDate.value = "";
+    saveEvent.textContent = "Сохранить";
+    cancelEditBtn.remove();
+};
+
 /* Модалка */
 const modal = document.getElementById("modal");
 const modalTitle = document.getElementById("modalTitle");
@@ -164,11 +177,12 @@ function showEvents(list) {
         return;
     }
 
-    list.forEach((e, index) => {
+    list.forEach((e) => {
         const li = document.createElement("li");
         li.style.display = "flex";
         li.style.justifyContent = "space-between";
         li.style.alignItems = "center";
+        li.style.marginBottom = "6px";
 
         const titleSpan = document.createElement("span");
         titleSpan.textContent = e.title;
@@ -177,32 +191,35 @@ function showEvents(list) {
         li.appendChild(titleSpan);
 
         if (isLoggedIn && e.category === "college") {
-            // Удаление
             const del = document.createElement("button");
-            del.textContent = "🗑";
-            del.style.background = "none";
-            del.style.border = "none";
-            del.style.cursor = "pointer";
+            del.textContent = "🗑 Удалить";
+            del.classList.add("event-btn");
             del.onclick = () => {
                 if (confirm("Удалить событие?")) {
-                    collegeEvents.splice(index, 1);
-                    localStorage.setItem("collegeEvents", JSON.stringify(collegeEvents));
-                    renderCalendar();
-                    showEvents([]);
+                    const idx = collegeEvents.findIndex(ev => ev.date === e.date && ev.title === e.title);
+                    if (idx !== -1) {
+                        collegeEvents.splice(idx, 1);
+                        localStorage.setItem("collegeEvents", JSON.stringify(collegeEvents));
+                        renderCalendar();
+                        showEvents([]);
+                    }
                 }
             };
             li.appendChild(del);
 
-            // Редактирование
             const edit = document.createElement("button");
-            edit.textContent = "✏️";
-            edit.style.background = "none";
-            edit.style.border = "none";
-            edit.style.cursor = "pointer";
+            edit.textContent = "✏️ Редактировать";
+            edit.classList.add("event-btn");
             edit.onclick = () => {
-                editingIndex = index;
-                eventTitle.value = e.title;
-                eventDate.value = e.date;
+                editingIndex = collegeEvents.findIndex(ev => ev.date === e.date && ev.title === e.title);
+                if (editingIndex !== -1) {
+                    eventTitle.value = e.title;
+                    eventDate.value = e.date;
+                    saveEvent.textContent = "Сохранить изменения";
+                    if (!document.body.contains(cancelEditBtn)) {
+                        eventForm.appendChild(cancelEditBtn);
+                    }
+                }
             };
             li.appendChild(edit);
         }
@@ -223,6 +240,7 @@ function openModal(e) {
 /* Сохранение события */
 saveEvent.onclick = () => {
     if (!isLoggedIn) return;
+
     const newEvent = {
         date: eventDate.value,
         title: eventTitle.value,
@@ -238,6 +256,8 @@ saveEvent.onclick = () => {
     if (editingIndex !== null) {
         collegeEvents[editingIndex] = newEvent;
         editingIndex = null;
+        saveEvent.textContent = "Сохранить";
+        if (document.body.contains(cancelEditBtn)) cancelEditBtn.remove();
     } else {
         collegeEvents.push(newEvent);
     }
