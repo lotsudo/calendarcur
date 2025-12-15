@@ -172,7 +172,7 @@ function showEvents(list) {
 
         if (isLoggedIn && e.category === "college") {
             const del = document.createElement("button");
-            del.textContent = "🗑";
+            del.textContent = "🗑 Удалить";
             del.classList.add("event-btn");
             del.onclick = () => {
                 if (confirm("Удалить событие?")) {
@@ -186,7 +186,7 @@ function showEvents(list) {
             li.appendChild(del);
 
             const edit = document.createElement("button");
-            edit.textContent = "✏️";
+            edit.textContent = "✏️ Редактировать";
             edit.classList.add("event-btn");
             edit.onclick = () => {
                 eventDate.value = e.date;
@@ -271,3 +271,4 @@ function renderCountdown() {
 updateAuthUI();
 renderCalendar();
 renderCountdown();
+
