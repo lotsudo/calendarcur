@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Календарь куратора</title>
-    <link rel="stylesheet" href="c.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -11,12 +11,12 @@
     <h1>Календарь куратора</h1>
 </header>
 
-<section id="loginPanel">
+<section class="auth-panel">
     <input type="password" id="passwordInput" placeholder="Пароль куратора">
     <button id="loginBtn">Войти</button>
     <span id="loginStatus"></span>
-</section>
     <div id="loginError"></div>
+</section>
 
 <section class="calendar-controls">
     <button id="prevMonth">◀</button>
@@ -25,30 +25,44 @@
 
     <select id="filterCategory">
         <option value="all">Все</option>
-        <option value="state">Гос.</option>
-        <option value="international">Межд.</option>
+        <option value="state">Государственные</option>
+        <option value="international">Международные</option>
         <option value="college">Колледж</option>
     </select>
+
+    <button id="printCalendar">Сохранить / PDF</button>
 </section>
+
+<div id="countdown"></div>
 
 <table id="calendar">
     <thead></thead>
     <tbody></tbody>
 </table>
 
-<section id="eventDetails">
+<section class="events">
     <h3>События дня</h3>
     <ul id="eventList"></ul>
 </section>
 
-<section id="eventForm" style="display:none">
-    <h3>Добавить / редактировать событие</h3>
+<section id="eventForm" class="event-form">
+    <h3>Добавить событие</h3>
     <input type="date" id="eventDate">
-    <input type="text" id="eventTitle" placeholder="Название">
+    <input type="text" id="eventTitle" placeholder="Название события">
     <button id="saveEvent">Сохранить</button>
 </section>
+
+<!-- Модальное окно -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span id="closeModal">×</span>
+        <h2 id="modalTitle"></h2>
+        <p id="modalDate"></p>
+        <p id="modalCategory"></p>
+        <p id="modalDescription"></p>
+    </div>
+</div>
 
 <script src="j.js"></script>
 </body>
 </html>
-
