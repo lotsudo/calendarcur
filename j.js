@@ -7,7 +7,7 @@ let isLoggedIn = localStorage.getItem("login") === "true";
 let collegeEvents = JSON.parse(localStorage.getItem("collegeEvents")) || [];
 let holidaysDB = [];
 let currentDate = new Date();
-let editingIndex = null; // для редактирования события
+let editingIndex = null;
 
 /* Элементы DOM */
 const calendar = document.querySelector("#calendar");
@@ -26,17 +26,16 @@ const eventTitle = document.getElementById("eventTitle");
 const saveEvent = document.getElementById("saveEvent");
 const countdown = document.getElementById("countdown");
 
-/* Кнопка "Отмена" при редактировании */
+/* Кнопка "Отмена" */
 const cancelEditBtn = document.createElement("button");
 cancelEditBtn.textContent = "Отмена";
-cancelEditBtn.classList.add("event-btn");
-cancelEditBtn.style.backgroundColor = "#e74c3c";
+cancelEditBtn.classList.add("event-btn", "cancel-btn");
 cancelEditBtn.onclick = () => {
     editingIndex = null;
     eventTitle.value = "";
     eventDate.value = "";
     saveEvent.textContent = "Сохранить";
-    cancelEditBtn.remove();
+    if (cancelEditBtn.parentNode) cancelEditBtn.remove();
 };
 
 /* Модалка */
@@ -85,14 +84,14 @@ fetch("holidays.json")
     })
     .catch(err => console.error("Ошибка загрузки holidays.json:", err));
 
-/* Получаем первое воскресенье месяца */
+/* Первое воскресенье месяца */
 function getFirstSunday(year, month) {
     const d = new Date(year, month, 1);
     while (d.getDay() !== 0) d.setDate(d.getDate() + 1);
     return d;
 }
 
-/* Получаем события на год */
+/* Все события на год */
 function getEventsForYear(year) {
     const system = holidaysDB.map(h => {
         let date;
@@ -187,10 +186,18 @@ function showEvents(list) {
         const titleSpan = document.createElement("span");
         titleSpan.textContent = e.title;
         titleSpan.style.cursor = "pointer";
+        titleSpan.style.flex = "1"; // название занимает оставшееся место
+        titleSpan.style.wordBreak = "break-word";
         titleSpan.onclick = () => openModal(e);
         li.appendChild(titleSpan);
 
         if (isLoggedIn && e.category === "college") {
+            const buttonContainer = document.createElement("div");
+            buttonContainer.style.display = "flex";
+            buttonContainer.style.gap = "6px";
+            buttonContainer.style.minWidth = "150px";
+            buttonContainer.style.justifyContent = "flex-end";
+
             const del = document.createElement("button");
             del.textContent = "🗑 Удалить";
             del.classList.add("event-btn");
@@ -205,7 +212,7 @@ function showEvents(list) {
                     }
                 }
             };
-            li.appendChild(del);
+            buttonContainer.appendChild(del);
 
             const edit = document.createElement("button");
             edit.textContent = "✏️ Редактировать";
@@ -216,12 +223,12 @@ function showEvents(list) {
                     eventTitle.value = e.title;
                     eventDate.value = e.date;
                     saveEvent.textContent = "Сохранить изменения";
-                    if (!document.body.contains(cancelEditBtn)) {
-                        eventForm.appendChild(cancelEditBtn);
-                    }
+                    if (!document.body.contains(cancelEditBtn)) eventForm.appendChild(cancelEditBtn);
                 }
             };
-            li.appendChild(edit);
+            buttonContainer.appendChild(edit);
+
+            li.appendChild(buttonContainer);
         }
 
         eventList.appendChild(li);
@@ -257,7 +264,7 @@ saveEvent.onclick = () => {
         collegeEvents[editingIndex] = newEvent;
         editingIndex = null;
         saveEvent.textContent = "Сохранить";
-        if (document.body.contains(cancelEditBtn)) cancelEditBtn.remove();
+        if (cancelEditBtn.parentNode) cancelEditBtn.remove();
     } else {
         collegeEvents.push(newEvent);
     }
