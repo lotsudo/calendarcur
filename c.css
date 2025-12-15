@@ -1,3 +1,4 @@
+/* Общие стили */
 * {
     box-sizing: border-box;
     font-family: "Segoe UI", sans-serif;
@@ -43,7 +44,7 @@ header {
     background: rgba(52, 73, 94, 0.08);
 }
 
-/* Управление */
+/* Управление календарем */
 .calendar-controls {
     display: flex;
     justify-content: center;
@@ -173,7 +174,7 @@ header {
     transition: 0.25s;
 }
 
-/* Синяя кнопка "Сохранить" */
+/* Кнопка "Сохранить" */
 #saveEvent {
     background: linear-gradient(135deg, #34495E, #2c3e50);
     color: white;
@@ -187,27 +188,28 @@ header {
 /* Кнопки событий */
 .event-btn {
     font-size: 16px;
-    padding: 6px 12px;
+    padding: 8px 12px;
     border-radius: 8px;
     cursor: pointer;
-    background-color: #34495E;
+    background: linear-gradient(135deg, #34495E, #2c3e50);
     color: white;
     border: none;
     transition: 0.25s;
+    white-space: nowrap;
 }
 
 .event-btn:hover {
-    background-color: #2c3e50;
+    background: linear-gradient(135deg, #2c3e50, #2c3e50);
     transform: translateY(-1px);
 }
 
 /* Кнопка "Отмена" */
 .event-btn.cancel-btn {
-    background-color: #e74c3c;
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
 }
 
 .event-btn.cancel-btn:hover {
-    background-color: #c0392b;
+    background: linear-gradient(135deg, #c0392b, #a93226);
     transform: translateY(-1px);
 }
 
@@ -264,4 +266,3 @@ header {
         background: white;
     }
 }
-
