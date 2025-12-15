@@ -1,3 +1,4 @@
+let selectedCell = null;
 const PASSWORD = "curator123";
 
 let isLoggedIn = localStorage.getItem("login") === "true";
@@ -203,3 +204,4 @@ function renderCountdown() {
 }
 
 updateAuthUI();
+
