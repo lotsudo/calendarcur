@@ -136,12 +136,51 @@ header {
 .events,
 .event-form {
     max-width: 1000px;
-    margin: 15px auto;
-    background: white;
-    padding: 15px;
-    border-radius: 16px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    margin: 20px auto;
+    background: linear-gradient(135deg, #f8f9fa, #ffffff);
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    border-left: 6px solid #34495E;
 }
+
+.event-form h3 {
+    margin-top: 0;
+    color: #34495E;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.event-form h3::before {
+    content: "➕";
+}
+
+.event-form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.event-form button {
+    background: #34495E;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.25s;
+}
+
+.event-form button:hover {
+    background: #2c3e50;
+    transform: translateY(-1px);
+}
+
 
 /* Модалка */
 .modal {
@@ -196,4 +235,5 @@ header {
         background: white;
     }
 }
+
 
