@@ -22,6 +22,8 @@ const eventTitle = document.getElementById("eventTitle");
 const saveEvent = document.getElementById("saveEvent");
 const countdown = document.getElementById("countdown");
 
+let editingIndex = null; // для редактирования
+
 /* Модалка */
 const modal = document.getElementById("modal");
 const modalTitle = document.getElementById("modalTitle");
@@ -57,6 +59,7 @@ loginBtn.onclick = () => {
     }
 };
 
+/* Загрузка праздников */
 fetch("holidays.json")
     .then(r => r.json())
     .then(data => {
@@ -66,7 +69,7 @@ fetch("holidays.json")
     });
 
 function getFirstSunday(year, month) {
-    const d = new Date(year, month - 1, 1);
+    const d = new Date(year, month, 1);
     while (d.getDay() !== 0) d.setDate(d.getDate() + 1);
     return d;
 }
@@ -75,7 +78,7 @@ function getEventsForYear(year) {
     const system = holidaysDB.map(h => {
         let date;
         if (h.type === "fixed") date = `${year}-${h.date}`;
-        if (h.type === "floating") date = getFirstSunday(year, h.month).toISOString().slice(0,10);
+        if (h.type === "floating") date = getFirstSunday(year, h.month-1).toISOString().slice(0,10);
         return { ...h, date };
     });
     return [...system, ...collegeEvents];
@@ -136,14 +139,13 @@ function renderCalendar() {
         if (dayEvents.length) td.classList.add(dayEvents[0].category);
 
         td.onclick = () => {
-    if (selectedCell) selectedCell.classList.remove("selected-day");
-    td.classList.add("selected-day");
-    selectedCell = td;
+            if (selectedCell) selectedCell.classList.remove("selected-day");
+            td.classList.add("selected-day");
+            selectedCell = td;
             eventDate.value = dateStr;
 
-
-    showEvents(dayEvents);
-};
+            showEvents(dayEvents);
+        };
 
         row.appendChild(td);
     }
@@ -169,7 +171,6 @@ function showEvents(list) {
         title.textContent = e.title;
         title.style.cursor = "pointer";
         title.onclick = () => openModal(e);
-
         li.appendChild(title);
 
         if (isLoggedIn && e.category === "college") {
@@ -187,41 +188,43 @@ function showEvents(list) {
                 }
             };
             li.appendChild(del);
+
+            const edit = document.createElement("button");
+            edit.textContent = "✏️";
+            edit.style.background = "none";
+            edit.style.border = "none";
+            edit.style.cursor = "pointer";
+            edit.onclick = () => {
+                editingIndex = index;
+                eventTitle.value = e.title;
+                eventDate.value = e.date;
+            };
+            li.appendChild(edit);
         }
 
         eventList.appendChild(li);
     });
 }
 
-
-    list.forEach(e => {
-        const li = document.createElement("li");
-        li.textContent = e.title;
-        li.onclick = () => openModal(e);
-        eventList.appendChild(li);
-    });
-}
-
-function openModal(e) {
-    modalTitle.textContent = e.title;
-    modalDate.textContent = "Дата: " + e.date;
-    modalCategory.textContent = "Категория: " + e.category;
-    modalDescription.textContent = e.description || "Описание отсутствует";
-    modal.style.display = "block";
-}
-
 saveEvent.onclick = () => {
     if (!isLoggedIn) return;
-    collegeEvents.push({
+    const newEvent = {
         date: eventDate.value,
         title: eventTitle.value,
         category: "college",
         description: "Событие колледжа"
-    });
+    };
+
+    if (editingIndex !== null) {
+        collegeEvents[editingIndex] = newEvent;
+        editingIndex = null;
+    } else {
+        collegeEvents.push(newEvent);
+    }
+
     localStorage.setItem("collegeEvents", JSON.stringify(collegeEvents));
     renderCalendar();
     eventTitle.value = "";
-
 };
 
 document.getElementById("printCalendar").onclick = () => window.print();
@@ -251,8 +254,3 @@ function renderCountdown() {
 }
 
 updateAuthUI();
-
-
-
-
-
