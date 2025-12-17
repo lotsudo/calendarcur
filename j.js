@@ -73,14 +73,27 @@ function getFirstSunday(year, month) {
 }
 
 function getEventsForYear(year) {
-    const system = holidaysDB.map(h => {
+    const systemEvents = holidaysDB.map(h => {
         let date;
-        if (h.type === "fixed") date = `${year}-${h.date}`;
-        if (h.type === "floating") date = getFirstSunday(year, h.month).toISOString().slice(0,10);
-        return { ...h, date };
+
+        if (h.type === "fixed") {
+            date = `${year}-${h.date}`;
+        }
+
+        if (h.type === "floating" && h.rule === "firstSunday") {
+            const d = getFirstSunday(year, h.month);
+            date = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+        }
+
+        return {
+            ...h,
+            date
+        };
     });
-    return [...system, ...collegeEvents];
+
+    return [...systemEvents, ...collegeEvents];
 }
+
 
 function renderCalendar() {
     thead.innerHTML = "";
@@ -271,4 +284,5 @@ function renderCountdown() {
 updateAuthUI();
 renderCalendar();
 renderCountdown();
+
 
